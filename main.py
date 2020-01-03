@@ -54,17 +54,21 @@ class mudfish_helper():
             print('無法從控制面板取得資料')
 
     def user_item_choose(self):
-        print('')
-        print('使用者有以下物品: ')
         user_data = self.api.get_user_status(self.AUTH_KEY)
         user_items = user_data['data']['user']['items']
-        for index, item in enumerate(user_items):
-            print('({0}) {1}'.format(index+1, item['name']).encode('cp950', errors='ignore').decode('utf-8'))
-        
-        while True:
-            item_choice = int(input('選擇物品: '))
-            if item_choice > 0 and item_choice <= len(user_items):
-                break
+        if len(user_items) > 0:
+            print('')
+            print('使用者有以下物品: ')
+            for index, item in enumerate(user_items):
+                print('({0}) {1}'.format(index+1, item['name']).encode('cp950', errors='ignore').decode('utf-8'))
+            
+            while True:
+                item_choice = int(input('選擇物品: '))
+                if item_choice > 0 and item_choice <= len(user_items):
+                    break
+        else:
+            print('')
+            print('使用者沒有物品可以修改，請先手動創建物品！')
 
         return user_items[int(item_choice)-1]
 
