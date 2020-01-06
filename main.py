@@ -86,21 +86,26 @@ class mudfish_helper():
                 node_choice = int(input('選擇節點: '))
                 if node_choice > 0 and node_choice <= len(ping_result):
                     break
-            print('開始連線..')
+            print('開始保存設定..')
             self.client.mudfish_stop()
             game_ips = game_ip.split('.')
             del game_ips[-1]
             self.api.modify_item(user_item['iid'], '.'.join(str(x) for x in game_ips) + '.0/24', self.AUTH_KEY)
             self.api.modify_conf(user_item['iid'], ping_result[int(node_choice)-1], self.AUTH_KEY)
-            self.client.mudfish_start()
-        
-            while True:
-                response = self.client.get_config_progress()
-                print('連線進度 {0}%'.format(float(response['total'])/float(response['count'])*100))
-                if response['count'] == response['total']:
-                    print('成功連線!!')
-                    break
-                time.sleep(0.5)
+            
+            print('保存成功')
+
+            self.client.logout()
+            self.api.s.close()
+            self.client.s.close()
+            exit()
+            # while True:
+            #     response = self.client.get_config_progress()
+            #     print('連線進度 {0}%'.format(float(response['total'])/float(response['count'])*100))
+            #     if response['count'] == response['total']:
+            #         print('成功連線!!')
+            #         break
+            #     time.sleep(0.5)
 
         else:
             print('沒有適合節點')
@@ -115,22 +120,25 @@ class mudfish_helper():
         game_ip = input('遊戲IP: ')
         self.vpn_connect(user_item, game_ip)
 
-        while True:
-            print('')
-            print('(1)新連線')
-            print('(2)更換節點')
-            print('(3)關閉連線')
-            print('(4)結束程式')
-            mode = int(input('選擇操作: '))
-            if mode == 1:
-                game_ip = input('遊戲IP: ')
-                self.vpn_connect(user_item, game_ip)
-            elif mode == 2:
-                self.vpn_connect(user_item, game_ip)
-            elif mode == 3:
-                self.vpn_disconnect()
-            elif mode == 4:
-                exit()
+        # while True:
+        #     print('')
+        #     print('(1)新連線')
+        #     print('(2)更換節點')
+        #     print('(3)關閉連線')
+        #     print('(4)結束程式')
+        #     mode = int(input('選擇操作: '))
+        #     if mode == 1:
+        #         self.login()
+        #         user_item = self.user_item_choose()
+        #         game_ip = input('遊戲IP: ')
+        #         self.vpn_connect(user_item, game_ip)
+        #     elif mode == 2:
+        #         self.login()
+        #         self.vpn_connect(user_item, game_ip)
+        #     elif mode == 3:
+        #         self.vpn_disconnect()
+        #     elif mode == 4:
+        #         exit()
 
 if __name__ == '__main__':
     m = mudfish_helper()

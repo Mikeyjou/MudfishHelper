@@ -53,3 +53,7 @@ class mudfish_client():
         url = self.URL + '/do/getconfprogress'
         response = self.s.get(url)
         return response.json()
+
+    def logout(self):
+        url = self.URL + '/logout.html'
+        self.s.get(url)
